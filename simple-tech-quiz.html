@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Technical Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+    #question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .option {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      width: 200px;
+      cursor: pointer;
+    }
+    #timer {
+      font-size: 20px;
+      margin: 15px 0;
+      color: red;
+    }
+    #result {
+      font-size: 28px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧠 Simple Tech Quiz</h1>
+  <div id="question"></div>
+  <div id="options"></div>
+  <div id="timer">Time Left: 10</div>
+  <div id="result"></div>
+
+  <script>
+    const quiz = [
+      {
+        q: "Which HTML tag is used to define a JavaScript script?",
+        options: ["<js>", "<script>", "<javascript>", "<code>"],
+        answer: "<script>"
+      },
+      {
+        q: "Which one is a JavaScript framework?",
+        options: ["Laravel", "Django", "React", "Flask"],
+        answer: "React"
+      },
+      {
+        q: "How do you declare a variable in JavaScript?",
+        options: ["int x = 5;", "var x = 5;", "x := 5", "let x : 5"],
+        answer: "var x = 5;"
+      },
+      {
+        q: "What does CSS stand for?",
+        options: ["Creative Style Sheets", "Cascading Style Sheets", "Computer Style Sheets", "Colorful Style Syntax"],
+        answer: "Cascading Style Sheets"
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+    let timer;
+    let timeLeft = 10;
+
+    function loadQuestion() {
+      if (current >= quiz.length) {
+        document.getElementById("question").style.display = "none";
+        document.getElementById("options").style.display = "none";
+        document.getElementById("timer").style.display = "none";
+        document.getElementById("result").innerText =
+          score >= 3 ? "🎉 You Win! Score: " + score : "❌ You Lose. Score: " + score;
+        return;
+      }
+
+      document.getElementById("question").innerText = quiz[current].q;
+      document.getElementById("options").innerHTML = "";
+
+      quiz[current].options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.innerText = option;
+        btn.className = "option";
+        btn.onclick = () => {
+          if (option === quiz[current].answer) {
+            score++;
+          }
+          nextQuestion();
+        };
+        document.getElementById("options").appendChild(btn);
+      });
+
+      timeLeft = 10;
+      document.getElementById("timer").innerText = "Time Left: " + timeLeft;
+      timer = setInterval(countdown, 1000);
+    }
+
+    function countdown() {
+      timeLeft--;
+      document.getElementById("timer").innerText = "Time Left: " + timeLeft;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        nextQuestion();
+      }
+    }
+
+    function nextQuestion() {
+      clearInterval(timer);
+      current++;
+      loadQuestion();
+    }
+
+    loadQuestion();
+  </script>
+
+</body>
+</html>
